@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Autofac;
 
 namespace ContentConsole
 {
@@ -6,39 +6,20 @@ namespace ContentConsole
     {
         public static void Main(string[] args)
         {
-            string bannedWord1 = "swine";
-            string bannedWord2 = "bad";
-            string bannedWord3 = "nasty";
-            string bannedWord4 = "horrible";
+            // hooking up DI and moving the code to the TextAnalyser Start method
 
-            string content =
-                "The weather in Manchester in winter is bad. It rains all the time - it must be horrible for people visiting.";
+            // Create the builder with which components/services are registered.
+            var builder = new ContainerBuilder();
 
-            int badWords = 0;
-            if (content.Contains(bannedWord1))
-            {
-                badWords = badWords + 1;
-            }
-            if (content.Contains(bannedWord2))
-            {
-                badWords = badWords + 1;
-            }
-            if (content.Contains(bannedWord3))
-            {
-                badWords = badWords + 1;
-            }
-            if (content.Contains(bannedWord4))
-            {
-                badWords = badWords + 1;
-            }
+            // Register types that expose interfaces...
+            builder.RegisterType<TextAnalyserService>().As<ITextAnalyserService>();
+            builder.RegisterType<TextAnalyser>();
 
-            Console.WriteLine("Scanned the text:");
-            Console.WriteLine(content);
-            Console.WriteLine("Total Number of negative words: " + badWords);
+            var container = builder.Build();
 
-            Console.WriteLine("Press ANY key to exit.");
-            Console.ReadKey();
+            var textAnalyser = container.Resolve<TextAnalyser>();
+
+            textAnalyser.Start();
         }
     }
-
 }
