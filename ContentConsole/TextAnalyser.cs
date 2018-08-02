@@ -18,11 +18,41 @@ namespace ContentConsole
             var content =
                 "The weather in Manchester in winter is bad. It rains all the time - it must be horrible for people visiting.";
 
-            var badWordsCount = GetNegativeWordsCount(content);
+            Console.WriteLine("Please enter the choice:");
+            Console.WriteLine("1: show the original phrase with negative words count");
+            Console.WriteLine("2: filter out the negative words");
+            Console.WriteLine("");
 
-            Console.WriteLine("Scanned the text:");
-            Console.WriteLine(content);
-            Console.WriteLine($"Total Number of negative words:{badWordsCount}");
+            var input = Console.ReadLine();
+
+            while (true)
+            {
+                if (string.IsNullOrEmpty(input) || !(input.Equals("1") || input.Equals("2")))
+                {
+                    Console.WriteLine("Invalid Selection");
+                    continue;
+                }
+
+                break;
+            }
+
+            // factory can be used to inject a masking analyser, but just to keep it simple
+            // using switch statment
+            switch (input)
+            {
+                case "1":
+                    var badWordsCount = GetNegativeWordsCount(content);
+                    Console.WriteLine("Scanned the text:");
+                    Console.WriteLine(content);
+                    Console.WriteLine($"Total Number of negative words:{badWordsCount}");
+                    break;
+
+                case "2":
+                    var filteredContent = FilterNegativeWords(content);
+                    Console.WriteLine("Scanned the text:");
+                    Console.WriteLine(filteredContent);
+                    break;
+            }
 
             Console.WriteLine("Press ANY key to exit.");
             Console.ReadKey();
@@ -42,6 +72,22 @@ namespace ContentConsole
             var badWordsCount = _textAnalyserService.GetNegativeWordsCount(content, badWords);
 
             return badWordsCount;
+        }
+
+        /// <summary>
+        /// Filter the negative words
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public string FilterNegativeWords(string content)
+        {
+            // get the list of negative words
+            var badWords = _wordsRepository.GetNegativeWords();
+
+            // filter negative words
+            var filterdString = _textAnalyserService.FilterNegativeWords(content, badWords);
+
+            return filterdString;
         }
     }
 }

@@ -14,5 +14,13 @@ namespace ContentConsole
         /// <param name="negativeWords"></param>
         /// <returns></returns>
         int GetNegativeWordsCount(string phrase, IEnumerable<string> negativeWords);
+
+        /// <summary>
+        /// Filter the negative words and masked them e.g. horrible will be masked to h#####e
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="negativeWords"></param>
+        /// <returns></returns>
+        string FilterNegativeWords(string content, IEnumerable<string> negativeWords);
     }
 }
