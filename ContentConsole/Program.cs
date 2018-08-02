@@ -12,8 +12,9 @@ namespace ContentConsole
             var builder = new ContainerBuilder();
 
             // Register types that expose interfaces...
-            builder.RegisterType<TextAnalyserService>().As<ITextAnalyserService>();
-            builder.RegisterType<TextAnalyser>();
+            builder.RegisterType<TextAnalyserService>().As<ITextAnalyserService>().SingleInstance();
+            builder.RegisterType<WordsRepository>().As<IWordsRepository>().SingleInstance();
+            builder.RegisterType<TextAnalyser>().SingleInstance();
 
             var container = builder.Build();
 
